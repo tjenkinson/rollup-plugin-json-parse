@@ -3,6 +3,17 @@ const RollupPluginJsonParse = require('./rollup-plugin-json-parse');
 
 const entryFile = 'entry.js';
 
+function buildJsonString(length) {
+  const prefix = `{"a":"`;
+  const suffix = `"}`;
+  let remaining = length - prefix.length - suffix.length;
+  let middle = '';
+  for (let i = 0; i < remaining; i++) {
+    middle += 'a';
+  }
+  return prefix + middle + suffix;
+}
+
 function buildFakeFile(id, contents) {
   return {
     resolveId(_id) {
@@ -20,13 +31,16 @@ function buildFakeFile(id, contents) {
   };
 }
 
-async function doBuild({ code }) {
+async function doBuild({ code, config = { minJSONStringSize: 0 } }) {
   const bundle = await rollup.rollup({
     input: entryFile,
     onwarn: e => {
       throw new Error(e);
     },
-    plugins: [RollupPluginJsonParse(), buildFakeFile(entryFile, code)]
+    plugins: [
+      RollupPluginJsonParse(config || undefined),
+      buildFakeFile(entryFile, code)
+    ]
   });
   const { output } = await bundle.generate({ format: 'cjs' });
   if (output.length !== 1) {
@@ -306,5 +320,50 @@ describe('RollupPluginJsonParse', () => {
         `
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
+  });
+
+  it('case 16', async () => {
+    await expect(
+      await doBuild({
+        config: undefined,
+        code: `
+          export const a = ${buildJsonString(1024)};
+        `
+      })
+    ).toEqual(
+      expect.stringContaining(
+        `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
+          buildJsonString(1024)
+        )});`
+      )
+    );
+  });
+
+  it('case 17', async () => {
+    await expect(
+      await doBuild({
+        config: null,
+        code: `
+          export const a = ${buildJsonString(1023)};
+        `
+      })
+    ).toEqual(expect.not.stringContaining(`JSON.parse(`));
+  });
+
+  it('case 18', async () => {
+    await expect(
+      await doBuild({
+        config: { minJSONStringSize: 20 },
+        code: `
+          export const a = ${buildJsonString(20)};
+        `
+      })
+    ).toEqual(
+      expect.stringContaining(
+        `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
+          buildJsonString(20)
+        )});`
+      )
+    );
   });
 });

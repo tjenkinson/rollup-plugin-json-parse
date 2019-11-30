@@ -18,7 +18,7 @@ const forEachObjectExpression = (node, callback) => {
   });
 };
 
-module.exports = () => {
+module.exports = ({ minJSONStringSize = 1024 } = {}) => {
   return {
     name: 'rollup-plugin-json-parse',
     transform(code) {
@@ -98,17 +98,20 @@ module.exports = () => {
       [...visitedObjects.keys()].forEach(objectExpression => {
         const parsed = visitedObjects.get(objectExpression);
         if (parsed) {
-          const { start, end } = objectExpression;
-          ms.prependLeft(start, '/*@__PURE__*/JSON.parse(');
-          ms.overwrite(
-            start,
-            end,
-            jsesc(JSON.stringify(parsed.parsed), {
-              json: true,
-              isScriptContext: true
-            })
-          );
-          ms.appendRight(end, ')');
+          const stringified = JSON.stringify(parsed.parsed);
+          if (stringified.length >= minJSONStringSize) {
+            const { start, end } = objectExpression;
+            ms.prependLeft(start, '/*@__PURE__*/JSON.parse(');
+            ms.overwrite(
+              start,
+              end,
+              jsesc(stringified, {
+                json: true,
+                isScriptContext: true
+              })
+            );
+            ms.appendRight(end, ')');
+          }
         }
       });
 

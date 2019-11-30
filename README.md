@@ -4,7 +4,7 @@
 
 A rollup plugin that wraps compatible objects with `JSON.parse()`.
 
-Anything that is not compatible will be left unchanged.
+Anything that is not compatible or would be less than 1024 characters, is left unchanged.
 
 ## Why?
 
@@ -30,11 +30,17 @@ import rollupPluginJsonParse from 'rollup-plugin-json-parse';
 
 export default {
   input: 'main.js',
-  plugins: [ rollupPluginJsonParse() ]
+  plugins: [
+    rollupPluginJsonParse({
+      minJSONStringSize: 1024 // default
+    })
+  ]
 });
 ```
 
 ## Example
+
+The following assumes `minJSONStringSize` of `0` for demonstration purposes.
 
 Input
 
