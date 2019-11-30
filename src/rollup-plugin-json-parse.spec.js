@@ -366,4 +366,20 @@ describe('RollupPluginJsonParse', () => {
       )
     );
   });
+
+  it('case 19', async () => {
+    await expect(
+      await doBuild({
+        code: `
+          export const a = {
+            prop1: "\\u2028\\u2029"
+          };
+        `
+      })
+    ).toEqual(
+      expect.stringContaining(
+        `const a = /*@__PURE__*/JSON.parse(\"{\\\"prop1\\\":\\\"\\u2028\\u2029\\\"}\");`
+      )
+    );
+  });
 });
