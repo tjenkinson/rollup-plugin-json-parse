@@ -81,11 +81,9 @@ module.exports = () => {
           }
           return false;
         });
-        visitedObjects.set(objectExpression, complete ? { parsed } : null);
-        if (!complete) {
-          return null;
-        }
-        return { parsed };
+        const result = complete ? { parsed } : null;
+        visitedObjects.set(objectExpression, result);
+        return result;
       };
 
       const visitedObjects = new Map();
