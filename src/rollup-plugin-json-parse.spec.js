@@ -54,16 +54,18 @@ describe('RollupPluginJsonParse', () => {
       })
     ).toEqual(
       expect.stringContaining(
-        `const a = JSON.parse(${JSON.stringify({
-          prop1: 1,
-          prop2: 1.1,
-          prop3: 'something',
-          prop4: null,
-          prop5: false,
-          prop6: {
-            nested1: 123
-          }
-        })});`
+        `const a = JSON.parse(${JSON.stringify(
+          JSON.stringify({
+            prop1: 1,
+            prop2: 1.1,
+            prop3: 'something',
+            prop4: null,
+            prop5: false,
+            prop6: {
+              nested1: 123
+            }
+          })
+        )});`
       )
     );
   });
@@ -140,9 +142,11 @@ describe('RollupPluginJsonParse', () => {
       })
     ).toEqual(
       expect.stringContaining(
-        `const a = JSON.parse(${JSON.stringify({
-          prop1: {}
-        })});`
+        `const a = JSON.parse(${JSON.stringify(
+          JSON.stringify({
+            prop1: {}
+          })
+        )});`
       )
     );
   });
@@ -158,9 +162,11 @@ describe('RollupPluginJsonParse', () => {
       })
     ).toEqual(
       expect.stringContaining(
-        `const a = JSON.parse(${JSON.stringify({
-          prop1: {}
-        })});`
+        `const a = JSON.parse(${JSON.stringify(
+          JSON.stringify({
+            prop1: {}
+          })
+        )});`
       )
     );
   });
@@ -196,7 +202,7 @@ describe('RollupPluginJsonParse', () => {
     ).toEqual(
       expect.stringContaining(`const a = {
             prop1: () => {},
-            prop2: JSON.parse({"nested1":true,"nested2":{"a":1}})
+            prop2: JSON.parse(\"{\\\"nested1\\\":true,\\\"nested2\\\":{\\\"a\\\":1}}\")
           };`)
     );
   });
@@ -212,9 +218,11 @@ describe('RollupPluginJsonParse', () => {
       })
     ).toEqual(
       expect.stringContaining(
-        `const a = JSON.parse(${JSON.stringify({
-          ['prop 1']: true
-        })});`
+        `const a = JSON.parse(${JSON.stringify(
+          JSON.stringify({
+            ['prop 1']: true
+          })
+        )});`
       )
     );
   });
@@ -236,8 +244,39 @@ describe('RollupPluginJsonParse', () => {
     ).toEqual(
       expect.stringContaining(`const a = {
             prop1: () => {}, // can't be optimized
-            prop2: JSON.parse({\"prop3\":2,\"prop4\":\"something\",\"prop 5\":null})
+            prop2: JSON.parse(\"{\\\"prop3\\\":2,\\\"prop4\\\":\\\"something\\\",\\\"prop 5\\\":null}\")
           };`)
+    );
+  });
+
+  it('case 13', async () => {
+    const res = await doBuild({
+      code: `
+          export const a = {
+            a: true
+          };
+          export const b = {
+            b: false
+          };
+        `
+    });
+    expect(res).toEqual(
+      expect.stringContaining(
+        `const a = JSON.parse(${JSON.stringify(
+          JSON.stringify({
+            a: true
+          })
+        )});`
+      )
+    );
+    expect(res).toEqual(
+      expect.stringContaining(
+        `const b = JSON.parse(${JSON.stringify(
+          JSON.stringify({
+            b: false
+          })
+        )});`
+      )
     );
   });
 });
