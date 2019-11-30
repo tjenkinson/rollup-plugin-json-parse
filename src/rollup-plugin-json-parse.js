@@ -1,4 +1,5 @@
 const MagicString = require('magic-string');
+const jsesc = require('jsesc');
 
 const forEachObjectExpression = (node, callback) => {
   const Node = Object.getPrototypeOf(node).constructor;
@@ -102,7 +103,10 @@ module.exports = () => {
           ms.overwrite(
             start,
             end,
-            JSON.stringify(JSON.stringify(parsed.parsed))
+            jsesc(JSON.stringify(parsed.parsed), {
+              json: true,
+              isScriptContext: true
+            })
           );
           ms.appendRight(end, ')');
         }

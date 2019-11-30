@@ -38,6 +38,7 @@
     "rollup": "^1.27.4"
   },
   "dependencies": {
+    "jsesc": "^2.5.2",
     "magic-string": "^0.25.4"
   }
 }
