@@ -43,6 +43,9 @@ module.exports = ({ minJSONStringSize = 1024 } = {}) => {
       const parseArray = ({ elements }) => {
         const parsed = [];
         const complete = elements.every(element => {
+          if (element === null) {
+            return false;
+          }
           const parsedExpression = parseExpression(element);
           if (!parsedExpression) {
             return false;

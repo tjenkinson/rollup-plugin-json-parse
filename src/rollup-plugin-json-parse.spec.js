@@ -414,4 +414,17 @@ describe('RollupPluginJsonParse', () => {
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
   });
+
+  it('case 22', async () => {
+    await expect(
+      await doBuild({
+        config: null,
+        code: `
+          export const a = {
+            a: ['a',,'b',]
+          };
+        `
+      })
+    ).toEqual(expect.not.stringContaining(`JSON.parse(`));
+  });
 });
