@@ -382,4 +382,36 @@ describe('RollupPluginJsonParse', () => {
       )
     );
   });
+
+  it('case 20', async () => {
+    const res = await doBuild({
+      code: `
+          export const a = {
+            a: [1, '2', false, null, {}]
+          };
+        `
+    });
+    expect(res).toEqual(
+      expect.stringContaining(
+        `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
+          JSON.stringify({
+            a: [1, '2', false, null, {}]
+          })
+        )});`
+      )
+    );
+  });
+
+  it('case 21', async () => {
+    await expect(
+      await doBuild({
+        config: null,
+        code: `
+          export const a = {
+            a: [() => {}]
+          };
+        `
+      })
+    ).toEqual(expect.not.stringContaining(`JSON.parse(`));
+  });
 });
