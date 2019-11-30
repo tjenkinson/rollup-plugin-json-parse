@@ -100,7 +100,7 @@ module.exports = () => {
         const parsed = visitedObjects.get(objectExpression);
         if (parsed) {
           const { start, end } = objectExpression;
-          ms.prependLeft(start, 'JSON.parse(');
+          ms.prependLeft(start, '/*@__PURE__*/JSON.parse(');
           ms.overwrite(
             start,
             end,

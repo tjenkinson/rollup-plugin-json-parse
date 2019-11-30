@@ -54,7 +54,7 @@ describe('RollupPluginJsonParse', () => {
       })
     ).toEqual(
       expect.stringContaining(
-        `const a = JSON.parse(${JSON.stringify(
+        `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
             prop1: 1,
             prop2: 1.1,
@@ -142,7 +142,7 @@ describe('RollupPluginJsonParse', () => {
       })
     ).toEqual(
       expect.stringContaining(
-        `const a = JSON.parse(${JSON.stringify(
+        `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
             prop1: {}
           })
@@ -162,7 +162,7 @@ describe('RollupPluginJsonParse', () => {
       })
     ).toEqual(
       expect.stringContaining(
-        `const a = JSON.parse(${JSON.stringify(
+        `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
             prop1: {}
           })
@@ -202,7 +202,7 @@ describe('RollupPluginJsonParse', () => {
     ).toEqual(
       expect.stringContaining(`const a = {
             prop1: () => {},
-            prop2: JSON.parse(\"{\\\"nested1\\\":true,\\\"nested2\\\":{\\\"a\\\":1}}\")
+            prop2: /*@__PURE__*/JSON.parse(\"{\\\"nested1\\\":true,\\\"nested2\\\":{\\\"a\\\":1}}\")
           };`)
     );
   });
@@ -218,7 +218,7 @@ describe('RollupPluginJsonParse', () => {
       })
     ).toEqual(
       expect.stringContaining(
-        `const a = JSON.parse(${JSON.stringify(
+        `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
             ['prop 1']: true
           })
@@ -244,7 +244,7 @@ describe('RollupPluginJsonParse', () => {
     ).toEqual(
       expect.stringContaining(`const a = {
             prop1: () => {}, // can't be optimized
-            prop2: JSON.parse(\"{\\\"prop3\\\":2,\\\"prop4\\\":\\\"something\\\",\\\"prop 5\\\":null}\")
+            prop2: /*@__PURE__*/JSON.parse(\"{\\\"prop3\\\":2,\\\"prop4\\\":\\\"something\\\",\\\"prop 5\\\":null}\")
           };`)
     );
   });
@@ -262,7 +262,7 @@ describe('RollupPluginJsonParse', () => {
     });
     expect(res).toEqual(
       expect.stringContaining(
-        `const a = JSON.parse(${JSON.stringify(
+        `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
             a: true
           })
@@ -271,7 +271,7 @@ describe('RollupPluginJsonParse', () => {
     );
     expect(res).toEqual(
       expect.stringContaining(
-        `const b = JSON.parse(${JSON.stringify(
+        `const b = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
             b: false
           })
