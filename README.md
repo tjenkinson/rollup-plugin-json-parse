@@ -12,7 +12,7 @@ It improves performance!
 
 > Because the JSON grammar is much simpler than JavaScript’s grammar, JSON can be parsed more efficiently than JavaScript. This knowledge can be applied to improve start-up performance for web apps that ship large JSON-like configuration object literals (such as inline Redux stores).
 
-See [this video on the chrome dev channel](https://youtu.be/ff4fgQxPaO0) for more info.
+See [this video on the chrome dev channel](https://youtu.be/ff4fgQxPaO0) and [the article on the V8 blog](https://v8.dev/blog/cost-of-javascript-2019#json) for more info.
 
 [![Chrome dev YouTube video](https://img.youtube.com/vi/ff4fgQxPaO0/0.jpg)](https://youtu.be/ff4fgQxPaO0)
 
