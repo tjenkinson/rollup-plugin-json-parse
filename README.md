@@ -26,7 +26,7 @@ npm install --save-dev rollup-plugin-json-parse
 
 ```js
 import { rollup } from 'rollup';
-import rollupPluginJsonParse from 'rollup-plugin-json-parse';
+const rollupPluginJsonParse = require('rollup-plugin-json-parse');
 
 export default {
   input: 'main.js',
