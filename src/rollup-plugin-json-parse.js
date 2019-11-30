@@ -65,12 +65,10 @@ module.exports = ({ minJSONStringSize = 1024 } = {}) => {
         const { properties } = objectExpression;
         const parsed = Object.create(null);
         const complete = properties.every(({ key, value, kind }) => {
-          if (kind !== 'init') {
-            return false;
-          }
           if (
-            key.type === 'Identifier' ||
-            (key.type === 'Literal' && typeof key.value === 'string')
+            kind === 'init' &&
+            (key.type === 'Identifier' ||
+              (key.type === 'Literal' && typeof key.value === 'string'))
           ) {
             const parsedExpression = parseExpression(value);
             if (!parsedExpression) {
