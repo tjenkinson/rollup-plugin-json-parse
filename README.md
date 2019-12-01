@@ -60,6 +60,6 @@ Output
 ```js
 const a = {
   prop1: () => {}, // can't be optimized
-  prop2: /*@__PURE__*/JSON.parse(\"{\\\"prop3\\\":2,\\\"prop4\\\":\\\"something\\\",\\\"prop 5\\\":null}\")
+  prop2: /*@__PURE__*/JSON.parse("{\"prop3\":2,\"prop4\":\"something\",\"prop 5\":null}")
 };
 ```
