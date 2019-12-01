@@ -35,7 +35,7 @@
     "husky": "^3.0.9",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
-    "rollup": "^1.27.4"
+    "rollup": "^1.27.7"
   },
   "dependencies": {
     "acorn": "^7.1.0",
