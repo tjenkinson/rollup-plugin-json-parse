@@ -1,5 +1,6 @@
 const MagicString = require('magic-string');
 const jsesc = require('jsesc');
+const acorn = require('acorn');
 
 const forEachObjectExpression = (node, callback) => {
   const Node = Object.getPrototypeOf(node).constructor;
@@ -88,7 +89,14 @@ module.exports = ({ minJSONStringSize = 1024 } = {}) => {
 
       const visitedObjects = new Map();
 
-      const ast = this.parse(code);
+      const ast = this.parse
+        ? this.parse(code)
+        : // older versions of rollup
+          acorn.parse(code, {
+            ecmaVersion: 2020,
+            preserveParens: false,
+            sourceType: 'module'
+          });
       forEachObjectExpression(ast, objectExpression =>
         parseObject(objectExpression)
       );
