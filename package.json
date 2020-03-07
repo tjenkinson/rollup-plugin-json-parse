@@ -38,7 +38,7 @@
     "rollup": "^2.0.0"
   },
   "dependencies": {
-    "acorn": "^7.1.0",
+    "acorn": "^7.1.1",
     "jsesc": "^2.5.2",
     "magic-string": "^0.25.4"
   }
