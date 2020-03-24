@@ -27,20 +27,20 @@ function buildFakeFile(id, contents) {
         return contents;
       }
       return null;
-    }
+    },
   };
 }
 
 async function doBuild({ code, config = { minJSONStringSize: 0 } }) {
   const bundle = await rollup.rollup({
     input: entryFile,
-    onwarn: e => {
+    onwarn: (e) => {
       throw new Error(e);
     },
     plugins: [
       RollupPluginJsonParse(config || undefined),
-      buildFakeFile(entryFile, code)
-    ]
+      buildFakeFile(entryFile, code),
+    ],
   });
   const { output } = await bundle.generate({ format: 'cjs' });
   if (output.length !== 1) {
@@ -64,7 +64,7 @@ describe('RollupPluginJsonParse', () => {
               nested1: 123
             }
           };
-        `
+        `,
       })
     ).toEqual(
       expect.stringContaining(
@@ -76,8 +76,8 @@ describe('RollupPluginJsonParse', () => {
             prop4: null,
             prop5: false,
             prop6: {
-              nested1: 123
-            }
+              nested1: 123,
+            },
           })
         )});`
       )
@@ -91,7 +91,7 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             prop1: undefined
           };
-        `
+        `,
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
   });
@@ -103,7 +103,7 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             prop1: () => {}
           };
-        `
+        `,
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
   });
@@ -115,7 +115,7 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             prop1: /a/
           };
-        `
+        `,
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
   });
@@ -128,7 +128,7 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             prop1: b
           };
-        `
+        `,
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
   });
@@ -140,7 +140,7 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             prop1: "a" + "b"
           };
-        `
+        `,
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
   });
@@ -152,13 +152,13 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             prop1: {}
           };
-        `
+        `,
       })
     ).toEqual(
       expect.stringContaining(
         `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
-            prop1: {}
+            prop1: {},
           })
         )});`
       )
@@ -172,13 +172,13 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             prop1: {}
           };
-        `
+        `,
       })
     ).toEqual(
       expect.stringContaining(
         `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
-            prop1: {}
+            prop1: {},
           })
         )});`
       )
@@ -195,7 +195,7 @@ describe('RollupPluginJsonParse', () => {
               nested: () => {}
             }
           };
-        `
+        `,
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
   });
@@ -211,7 +211,7 @@ describe('RollupPluginJsonParse', () => {
               nested2: { a: 1 }
             }
           };
-        `
+        `,
       })
     ).toEqual(
       expect.stringContaining(`const a = {
@@ -228,13 +228,13 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             ['prop 1']: true
           };
-        `
+        `,
       })
     ).toEqual(
       expect.stringContaining(
         `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
-            ['prop 1']: true
+            ['prop 1']: true,
           })
         )});`
       )
@@ -253,7 +253,7 @@ describe('RollupPluginJsonParse', () => {
               ['prop 5']: null
             }
           };
-        `
+        `,
       })
     ).toEqual(
       expect.stringContaining(`const a = {
@@ -272,13 +272,13 @@ describe('RollupPluginJsonParse', () => {
           export const b = {
             b: false
           };
-        `
+        `,
     });
     expect(res).toEqual(
       expect.stringContaining(
         `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
-            a: true
+            a: true,
           })
         )});`
       )
@@ -287,7 +287,7 @@ describe('RollupPluginJsonParse', () => {
       expect.stringContaining(
         `const b = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
-            b: false
+            b: false,
           })
         )});`
       )
@@ -301,7 +301,7 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             prop1: '<script></script>'
           };
-        `
+        `,
       })
     ).toEqual(
       expect.stringContaining(
@@ -317,7 +317,7 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             prop1: \`\`
           };
-        `
+        `,
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
   });
@@ -328,7 +328,7 @@ describe('RollupPluginJsonParse', () => {
         config: undefined,
         code: `
           export const a = ${buildJsonString(1024)};
-        `
+        `,
       })
     ).toEqual(
       expect.stringContaining(
@@ -345,7 +345,7 @@ describe('RollupPluginJsonParse', () => {
         config: null,
         code: `
           export const a = ${buildJsonString(1023)};
-        `
+        `,
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
   });
@@ -356,7 +356,7 @@ describe('RollupPluginJsonParse', () => {
         config: { minJSONStringSize: 20 },
         code: `
           export const a = ${buildJsonString(20)};
-        `
+        `,
       })
     ).toEqual(
       expect.stringContaining(
@@ -374,7 +374,7 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             prop1: "\\u2028\\u2029"
           };
-        `
+        `,
       })
     ).toEqual(
       expect.stringContaining(
@@ -389,13 +389,13 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             a: [1, '2', false, null, {}]
           };
-        `
+        `,
     });
     expect(res).toEqual(
       expect.stringContaining(
         `const a = /*@__PURE__*/JSON.parse(${JSON.stringify(
           JSON.stringify({
-            a: [1, '2', false, null, {}]
+            a: [1, '2', false, null, {}],
           })
         )});`
       )
@@ -410,7 +410,7 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             a: [() => {}]
           };
-        `
+        `,
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
   });
@@ -423,7 +423,7 @@ describe('RollupPluginJsonParse', () => {
           export const a = {
             a: ['a',,'b',]
           };
-        `
+        `,
       })
     ).toEqual(expect.not.stringContaining(`JSON.parse(`));
   });
