@@ -9,9 +9,9 @@ const forEachObjectExpression = (node, callback) => {
     callback(node);
   }
 
-  Object.keys(node).forEach(key => {
+  Object.keys(node).forEach((key) => {
     const maybeChildren = Array.isArray(node[key]) ? node[key] : [node[key]];
-    maybeChildren.forEach(maybeChild => {
+    maybeChildren.forEach((maybeChild) => {
       if (maybeChild instanceof Node) {
         forEachObjectExpression(maybeChild, callback);
       }
@@ -23,7 +23,7 @@ module.exports = ({ minJSONStringSize = 1024 } = {}) => {
   return {
     name: 'rollup-plugin-json-parse',
     transform(code) {
-      const parseExpression = expression => {
+      const parseExpression = (expression) => {
         switch (expression.type) {
           case 'Literal':
             if (
@@ -43,7 +43,7 @@ module.exports = ({ minJSONStringSize = 1024 } = {}) => {
 
       const parseArray = ({ elements }) => {
         const parsed = [];
-        const complete = elements.every(element => {
+        const complete = elements.every((element) => {
           if (element === null) {
             return false;
           }
@@ -60,7 +60,7 @@ module.exports = ({ minJSONStringSize = 1024 } = {}) => {
         return { parsed };
       };
 
-      const parseObject = objectExpression => {
+      const parseObject = (objectExpression) => {
         if (visitedObjects.has(objectExpression)) {
           return visitedObjects.get(objectExpression);
         }
@@ -95,14 +95,14 @@ module.exports = ({ minJSONStringSize = 1024 } = {}) => {
           acorn.parse(code, {
             ecmaVersion: 2020,
             preserveParens: false,
-            sourceType: 'module'
+            sourceType: 'module',
           });
-      forEachObjectExpression(ast, objectExpression =>
+      forEachObjectExpression(ast, (objectExpression) =>
         parseObject(objectExpression)
       );
 
       const ms = new MagicString(code);
-      [...visitedObjects.keys()].forEach(objectExpression => {
+      [...visitedObjects.keys()].forEach((objectExpression) => {
         const parsed = visitedObjects.get(objectExpression);
         if (parsed) {
           const stringified = JSON.stringify(parsed.parsed);
@@ -114,7 +114,7 @@ module.exports = ({ minJSONStringSize = 1024 } = {}) => {
               end,
               jsesc(stringified, {
                 json: true,
-                isScriptContext: true
+                isScriptContext: true,
               })
             );
             ms.appendRight(end, ')');
@@ -124,8 +124,8 @@ module.exports = ({ minJSONStringSize = 1024 } = {}) => {
 
       return {
         code: ms.toString(),
-        map: ms.generateMap({ hires: true })
+        map: ms.generateMap({ hires: true }),
       };
-    }
+    },
   };
 };
