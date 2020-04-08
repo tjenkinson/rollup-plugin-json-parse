@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "acorn": "^7.1.1",
-    "jsesc": "^2.5.2",
+    "jsesc": "^3.0.0",
     "magic-string": "^0.25.4"
   }
 }
