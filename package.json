@@ -4,8 +4,8 @@
   "description": "A rollup plugin that wraps compatible objects with JSON.parse() to improve performance.",
   "main": "src/rollup-plugin-json-parse.js",
   "scripts": {
-    "prettier": "prettier --write **/*.{js,md}",
-    "lint": "prettier --check **/*.{js,md}",
+    "prettier": "prettier --write .",
+    "lint": "prettier --check .",
     "test": "jest"
   },
   "husky": {
