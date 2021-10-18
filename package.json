@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/tjenkinson/rollup-plugin-json-parse#readme",
   "devDependencies": {
-    "@types/jest": "^26.0.10",
+    "@types/jest": "^27.0.2",
     "husky": "^4.0.2",
     "jest": "^27.0.6",
     "prettier": "^2.0.2",
