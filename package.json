@@ -41,6 +41,6 @@
   "dependencies": {
     "acorn": "^8.0.1",
     "jsesc": "^3.0.1",
-    "magic-string": "^0.25.4"
+    "magic-string": "^0.26.7"
   }
 }
